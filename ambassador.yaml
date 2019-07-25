@@ -1,0 +1,27 @@
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: ambassador
+  namespace: test
+spec:
+  releaseName: ambassador
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com
+    name: ambassador
+    version: 2.12.4
+  values:
+    service:
+      type: ClusterIP
+      annotations:
+        getambassador.io/config: |
+          ---
+          apiVersion: getambassador.io/v1
+          kind: Module
+          name: ambassador
+          config:
+            envoy_log_type: json
+    prometheusExporter:
+      enabled: true
+    scope:
+      singleNamespace: true
